@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-import sklearn
+from sklearn import preprocessing
+import scipy
 
 table = pd.read_csv("counts.tab")
 # table = pd.read_csv("magictabs.rtf")
@@ -31,26 +32,37 @@ print(table4.head())
 print("parsed")
 # [5 rows x 385 columns]
 # actual size is [24490 rows x 385 columns]
+table5 = table4.T
+table6 = table5.drop('gene') #tar bort översta raden
+table7 = table6.values
+print(table7)
+print("Yay it works!")
 
+#THIS ACTUALLY WORKS, YEET - BUT WE SHOULD TRY ANOTHER METHOD AS WELL
+normalized_X = preprocessing.normalize(table7)
+print(normalized_X)
+standardized_X = preprocessing.scale(table7)
+print(standardized_X)
 
+print("LMAO PLZ WORK")
+#OTHER METHOD FOR STANDARDIZATION
+import scipy
+from scipy.sparse import csr_matrix
+table8 = scipy.sparse.csr_matrix(table7)
+arr = np.array(table8)
+print(csr_matrix(arr))
 
+#print("plz work")
+#normalized_X = preprocessing.normalize(table10)
+#print(normalized_X)
+# funkade inte
+#table7 = scipy.sparse.csr_matrix(table6.values)
+#print(table7.head())
 
-# more attempts at splitting
-# lines = table
-# for line in lines:
-#     line.slice(',')[16].split('\t')
+# import scipy
+# from scipy.sparse import csr_matrix
+# arr = np.array(table5)
+# print(csr_matrix(arr))
 
-# print( list(x for x in table.strip().split('\t'))  for x in table)
-
-# table2 = table.strip("\t")
-# table3 = table.reader(table, delimiter="\t")
-# print(table3.head())
-
-# for aRow in table:
-#     print aRow.split('\t')
-# we tried
-# tabstuff = ["a"	"b"	"c"	"d"	"e"	"f"	"g",
-# 4	65	87	98	56	43	2,
-# 45	67	67	8	90	34	23,
-# 23	43	43	56	78	89	98]
-# print(tabstuff)
+# we want to convert it into a sparse matrix
+# scaled_data = preprocessing.scale(table5)
