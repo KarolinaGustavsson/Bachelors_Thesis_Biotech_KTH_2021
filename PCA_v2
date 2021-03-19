@@ -1,0 +1,103 @@
+# --------------------------------------------
+
+# These are all imports needed to run the code.
+
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing
+import scipy
+import plotly.express as px
+
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+from sklearn.manifold import TSNE
+from sklearn.preprocessing import StandardScaler
+
+import plotly.graph_objs as go
+import plotly.offline as offline
+
+offline.init_notebook_mode()
+
+# --------------------------------------------
+
+# Import the data from the file "counts.tab" and turn into csv file.
+
+table_counts = pd.read_csv("counts.tab", delimiter = '\t')
+
+# --------------------------------------------
+
+# Transpose the matrix and remove sample IDs and genes.
+
+table_counts = table_counts.T               # Transpose the matrix
+table_counts = table_counts.drop('gene')    # remove first column (genes)
+table_counts = table_counts.values          # remove first row (sample names)
+table_counts = table_counts.T               # Transpose the matrix
+
+#num_of_rows = (len(table_counts))          # calculate number of rows
+#num_of_cols = (len(table_counts[0]))        # calculate number of columns
+#print("The matrix is a [", num_of_rows, "x", num_of_cols, "] matrix.")
+
+# --------------------------------------------
+
+normalized_counts = preprocessing.normalize(table_counts)   # normalize the matrix
+
+# --------------------------------------------
+
+# Beräkna antal components för en viss varians
+
+# cumulative_variance = 0
+# components = 0
+#
+# while cumulative_variance < 0.8:
+#     components = components + 1
+#     pca = PCA(n_components=components)      # store components for PCA
+#     Y = pca.fit(normalized_counts)          # run PCA on data
+#     var_exp = Y.explained_variance_ratio_   # calculate and store variance
+#     cum_var_exp = np.cumsum(var_exp)        # calculate and store cumulative var.
+#     values_Y = pca.components_              # stores the PCA components
+#     cumulative_variance = cum_var_exp[-1]
+#     print(cumulative_variance)
+#     print(components)
+
+# --------------------------------------------
+
+components = 140                        # choose number of components for PCA
+pca = PCA(n_components=components)      # store components for PCA
+Y = pca.fit(normalized_counts)          # run PCA on data
+var_exp = Y.explained_variance_ratio_   # calculate and store variance
+cum_var_exp = np.cumsum(var_exp)        # calculate and store cumulative var.
+
+values_Y = pca.components_              # stores the PCA components
+
+# print(values_Y)
+# num_of_rows = (len(values_Y))         # calculate number of rows
+# num_of_cols = (len(values_Y[0]))      # calculate number of columns
+# print(" ")
+# print("The matrix is a [", num_of_rows, "x", num_of_cols, "] matrix.")
+
+# --------------------------------------------
+
+#This part is the code used to plot the explained variance
+
+# x = ["PC%s" %i for i in range(1,components)]
+# trace1 = go.Bar(x=x,y=list(var_exp),name="Explained Variance")
+# trace2 = go.Scatter(x=x,y=cum_var_exp,name="Cumulative Variance")
+# layout = go.Layout(title='Explained variance',xaxis=dict(title='Principle Components', tickmode='linear'))
+# data = [trace1, trace2]
+# fig = go.Figure(data=data, layout=layout)
+# fig
+
+# --------------------------------------------
+
+# This part is the code used to plot the first three PCA-components.
+
+values_Y = values_Y.T                   # Transpose the matrix
+df = pd.DataFrame(values_Y)             # Convert into DataFrame
+
+df.drop(df.iloc[:, 3:num_of_cols], inplace = True, axis = 1) # Remove all columns between column index 3 to 24490
+df.columns = ['PC1', 'PC2', 'PC3']      # rename columns
+
+fig = px.scatter_3d(df, x='PC1', y='PC2', z='PC3')    # Plot three components
+fig.show()                              # show figure
+ 
+# --------------------------------------------
