@@ -155,6 +155,6 @@ plt.show()
 
 # # --------------------------------------------
 
-executionTime = (time.time() - startTime)/60                                       #timer stop
+executionTime = (time.time() - startTime)/60                                       #timer stop.
 print('Execution time in seconds: ' + str(executionTime))
 
