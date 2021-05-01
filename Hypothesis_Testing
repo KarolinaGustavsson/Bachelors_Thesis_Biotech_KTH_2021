@@ -133,6 +133,9 @@ def qvalues(pvalues):
 
 qv = qvalues(pvalues) #vi får ut ungefär 0.88 -> 12% av generna är differentially expressed
 
+print("vi vill toppgenerna:")
+print(qv.iloc[0:40,0:4]) #40 är antal rader vi vill se
+
 sns.lineplot(pvalues["q"],list(range(pvalues.shape[0])),ci=None,lw=3)
 plt.xlim(0,0.1);
 plt.ylim();
