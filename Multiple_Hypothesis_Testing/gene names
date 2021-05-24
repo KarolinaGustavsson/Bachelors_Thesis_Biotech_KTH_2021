@@ -1,0 +1,36 @@
+
+import pandas as pd
+import numpy as np
+
+file = "counts_imputed.csv"                                           # choose what file to import data from
+counts = pd.read_csv(file, delimiter = ',', header=0, dtype='a')   # import data from csv-file
+print(counts)
+df1 = pd.DataFrame(data=counts)
+arr = np.array(counts)
+
+
+
+# final genes for imputed data 
+
+print("all")
+print(arr[1516,0])
+print(arr[11719,0])
+print(arr[10187,0])
+print(arr[4800,0])
+print(arr[7985,0])
+
+
+print("red red")
+print(arr[174,0])
+print(arr[1516,0])
+print(arr[22099,0])
+print(arr[4800,0])
+print(arr[7985,0])
+
+print("green green")
+print(arr[8858,0])
+print(arr[901,0])
+print(arr[1873,0])
+print(arr[11719,0])
+print(arr[16200,0])
+
